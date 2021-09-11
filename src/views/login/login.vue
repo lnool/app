@@ -1,6 +1,12 @@
 <template>
   <div class="login">
     <login-panel></login-panel>
+    <div class="copy">
+      <el-link type="primary" href="https://webify.cloudbase.net/"
+        >CloudBase Webify.</el-link
+      >
+      提供网站托管服务
+    </div>
   </div>
 </template>
 
@@ -21,5 +27,9 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   background: url('../../assets/img/login-bg.svg') repeat;
+}
+.copy {
+  position: fixed;
+  bottom: 30px;
 }
 </style>
