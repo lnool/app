@@ -1,22 +1,24 @@
 <template>
   <div class="login-panel">
     <div class="login-title">后台管理系统</div>
-    <transition name="el-fade-in-linear">
-      <el-tabs>
-        <el-tab-pane>
-          <template #label>
-            <span>账户登录</span>
-          </template>
-          <login-account ref="accountRef" />
-        </el-tab-pane>
-        <el-tab-pane>
-          <template #label>
-            <span>手机登录登录</span>
-          </template>
-          <login-phone />
-        </el-tab-pane>
-      </el-tabs>
-    </transition>
+    <el-tabs v-model="loginType">
+      <el-tab-pane name="account">
+        <template #label>
+          <span>账户登录</span>
+        </template>
+        <transition name="el-zoom-in-center">
+          <login-account ref="accountRef" v-show="loginType === 'account'" />
+        </transition>
+      </el-tab-pane>
+      <el-tab-pane name="phone">
+        <template #label>
+          <span>手机登录登录</span>
+        </template>
+        <transition name="el-zoom-in-center">
+          <login-phone ref="phoneRef" v-show="loginType === 'phone'" />
+        </transition>
+      </el-tab-pane>
+    </el-tabs>
     <div class="account-control">
       <el-checkbox v-model="isRemember">记住密码</el-checkbox>
       <el-link>忘记密码</el-link>
@@ -38,18 +40,27 @@ export default defineComponent({
   setup() {
     // 记住密码
     const isRemember = ref(true)
-
     const accountRef = ref()
+    const phoneRef = ref()
+    const loginType = ref('account')
 
     // 登录
     const loginClick = () => {
-      accountRef.value?.accountLogin()
+      if (loginType.value === 'account') {
+        accountRef.value?.accountLogin(isRemember.value)
+      }
+
+      if (loginType.value === 'phone') {
+        phoneRef.value?.phoneLogin()
+      }
     }
 
     return {
       isRemember,
-      loginClick,
-      accountRef
+      accountRef,
+      phoneRef,
+      loginType,
+      loginClick
     }
   }
 })
@@ -59,6 +70,7 @@ export default defineComponent({
 .login-panel {
   width: 320px;
   padding: 0 60px 20px 60px;
+  background: #00a1ba08;
   box-shadow: 0 8px 8px rgba(10, 16, 20, 0.24), 0 0 8px rgba(10, 16, 20, 0.12);
   .login-title {
     text-align: center;

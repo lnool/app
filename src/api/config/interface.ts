@@ -23,3 +23,9 @@ export interface RequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
   interceptors?: RequestInterceptors<T>
   showLoading?: boolean
 }
+
+/** 返回结果 */
+export interface IResult {
+  code: number
+  data: any
+}

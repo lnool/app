@@ -2,43 +2,56 @@
   <div class="login-account">
     <el-form
       label-width="60px"
-      :rules="rules"
+      :rules="accountRules"
       :model="account"
       ref="formRef"
       label-position="top"
     >
-      <el-form-item label="账号" prop="name">
+      <el-form-item label="账号：" prop="name">
         <el-input v-model="account.name" />
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="account.password" />
+      <el-form-item label="密码：" prop="password">
+        <el-input v-model="account.password" show-password />
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script lang="ts">
-import { ElForm } from 'element-plus'
 import { reactive, ref, defineComponent } from 'vue'
-import { rules } from '../config'
+import { useStore } from 'vuex'
+import { ElForm } from 'element-plus'
 
+import { accountRules } from '@/utils/rules'
+import LocalCache from '@/utils/cache'
 export default defineComponent({
   setup() {
+    const store = useStore()
+
     const account = reactive({
-      name: '',
-      password: ''
+      name: LocalCache.get('name') ?? '',
+      password: LocalCache.get('password') ?? ''
     })
 
     const formRef = ref<InstanceType<typeof ElForm>>()
 
-    const accountLogin = () => {
+    const accountLogin = (isRemember: boolean) => {
       formRef.value?.validate((isValid: boolean | undefined) => {
-        console.log(isValid)
+        if (!isValid) return
+        // 记住密码
+        if (isRemember) {
+          LocalCache.set('name', account.name)
+          LocalCache.set('password', account.password)
+        } else {
+          LocalCache.delete('name')
+          LocalCache.delete('password')
+        }
+        store.dispatch('login/accountLogin', { ...account })
       })
     }
 
     return {
-      rules,
+      accountRules,
       account,
       formRef,
       accountLogin

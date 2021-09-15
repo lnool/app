@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ElLoading, ILoadingInstance } from 'element-plus'
 
 import type { AxiosInstance } from 'axios'
-import type { RequestInterceptors, RequestConfig } from './type'
+import type { RequestInterceptors, RequestConfig } from './interface'
 
 /**
  * http 请求类
@@ -70,7 +70,7 @@ export default class Http {
     )
   }
 
-  request<T>(config: RequestConfig<T>): Promise<T> {
+  request<T = any>(config: RequestConfig<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       // 单个请求对config的处理
       if (config.interceptors?.requestInterceptor) {
@@ -96,19 +96,19 @@ export default class Http {
     })
   }
 
-  get<T>(config: RequestConfig<T>): Promise<T> {
+  get<T = any>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: RequestConfig<T>): Promise<T> {
+  post<T = any>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: RequestConfig<T>): Promise<T> {
+  delete<T = any>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: RequestConfig<T>): Promise<T> {
+  patch<T = any>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }

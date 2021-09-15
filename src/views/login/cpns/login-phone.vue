@@ -1,14 +1,20 @@
 <template>
   <div class="login-phone">
-    <el-form ref="form" label-width="60px" :model="phone" label-position="top">
-      <el-form-item label="账号" prop="num">
+    <el-form
+      ref="formRef"
+      label-width="60px"
+      :rules="phoneRules"
+      :model="phone"
+      label-position="top"
+    >
+      <el-form-item label="手机号：" prop="num">
         <el-input v-model="phone.num" />
       </el-form-item>
-      <el-form-item label="密码" prop="code">
+      <el-form-item label="验证码：" prop="code">
         <div class="login-phone-code">
           <el-input v-model="phone.code" />
-          <el-button type="primary" class="login-phone-code-btn"
-            >获取验证码</el-button
+          <el-link :underline="false" class="login-phone-code-link"
+            >获取验证码</el-link
           >
         </div>
       </el-form-item>
@@ -17,15 +23,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { ref, reactive, defineComponent } from 'vue'
 
+import { useStore } from 'vuex'
+
+import { phoneRules } from '@/utils/rules'
+import { ElForm } from 'element-plus'
 export default defineComponent({
   setup() {
+    const store = useStore()
+
     const phone = reactive({
       num: '',
       code: ''
     })
-    return { phone }
+    const formRef = ref<InstanceType<typeof ElForm>>()
+
+    const phoneLogin = () => {
+      formRef.value?.validate((isValid: boolean | undefined) => {
+        if (!isValid) return
+        store.dispatch('phoneLogin', { ...phone })
+      })
+    }
+
+    return {
+      phone,
+      formRef,
+      phoneRules,
+      phoneLogin
+    }
   }
 })
 </script>
@@ -33,8 +59,9 @@ export default defineComponent({
 <style lang="less" scoped>
 .login-phone-code {
   display: flex;
-  .login-phone-code-btn {
-    margin-left: 30px;
+  .login-phone-code-link {
+    width: 120px;
+    margin-left: 20px;
   }
 }
 </style>
