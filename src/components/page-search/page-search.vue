@@ -6,40 +6,45 @@
       </template>
       <template #footer>
         <div class="l-header">
-          <el-button icon="el-icon-refresh-left" size="small">重置</el-button>
-          <el-button type="primary" icon="el-icon-search" size="small"
-            >搜索</el-button
+          <el-button
+            icon="el-icon-refresh-left"
+            size="small"
+            @click="resetClick"
+            >重置</el-button
           >
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="small"
+            @click="handleQueryClick"
+          >
+            搜索
+          </el-button>
         </div>
       </template>
     </l-form>
   </div>
 </template>
 
-<script lang="ts">
-import { reactive, defineComponent } from 'vue'
+<script lang="ts" setup>
+import { ref, defineProps, defineEmits } from 'vue'
 import LForm from '@/base-ui/form'
-export default defineComponent({
-  components: { LForm },
-  props: {
-    searchConfig: {
-      type: Object,
-      required: true
-    }
-  },
-  setup() {
-    const formData = reactive({
-      id: '',
-      password: '',
-      name: '',
-      sport: '',
-      createTime: ''
-    })
-    return {
-      formData
-    }
-  }
-})
+const props = defineProps(['searchConfig'])
+const emit = defineEmits(['resetBtnClick', 'queryBtnClick'])
+const formItems = props.searchConfig?.formItems ?? []
+const formOriginData: any = {}
+for (const item of formItems) {
+  formOriginData[item.field] = ''
+}
+const formData = ref(formOriginData)
+
+const resetClick = () => {
+  formData.value = formOriginData
+  emit('resetBtnClick')
+}
+const handleQueryClick = () => {
+  emit('queryBtnClick', formData.value)
+}
 </script>
 
 <style lang="less" scoped>

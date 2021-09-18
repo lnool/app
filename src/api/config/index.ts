@@ -1,7 +1,7 @@
 import store from '@/store'
 import Http from './http'
 // 生产环境
-const production = 'http://127.0.0.1:8000'
+const production = 'http://152.136.185.210:5000'
 // 开发环境
 const development = 'http://152.136.185.210:5000'
 

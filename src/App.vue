@@ -1,9 +1,14 @@
 <template>
   <div class="app">
-    <router-view></router-view>
+    <el-config-provider :locale="zhCn">
+      <router-view />
+    </el-config-provider>
   </div>
 </template>
-
+<script lang="ts" setup>
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+</script>
 <style lang="less">
 @import './assets/css/index.less';
 .app {

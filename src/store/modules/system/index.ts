@@ -7,26 +7,37 @@ const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
   state() {
     return {
-      userList: [],
-      userCount: 0
+      usersList: [],
+      usersCount: 0,
+      roleList: [],
+      roleCount: 0
     }
   },
   mutations: {
-    changeUserList(state: ISystemState, payload: any) {
-      state.userList = payload
+    changeList(state: ISystemState & any, payload: any): void {
+      const { pageName, list } = payload
+      state[`${pageName}/List`] = list
     },
-    changeUserCount(state: ISystemState, payload: any) {
-      state.userCount = payload
+    changeCount(state: ISystemState & any, payload: any): void {
+      const { pageName, totalCount } = payload
+      state[`${pageName}/Count`] = totalCount
     }
+  },
+  getters: {
+    getList: (state: ISystemState & any) => (pageName: string) =>
+      state[`${pageName}/List`],
+    getCount: (state: ISystemState & any) => (pageName: string) =>
+      state[`${pageName}/Count`]
   },
   actions: {
     async getPageListAction({ commit }, payload: any) {
+      const pageName = payload.pageName
       const { list, totalCount } = (
-        await getPageList(payload.url, payload.data)
+        await getPageList(`/${pageName}/list`, payload.data)
       ).data
 
-      commit('changeUserList', list)
-      commit('changeUserCount', totalCount)
+      commit(`changeList`, { list, pageName })
+      commit(`changeCount`, { totalCount, pageName })
     }
   }
 }

@@ -1,6 +1,6 @@
 import { IForm } from '@/base-ui/form'
 
-export const config: IForm = {
+export const searchConfig: IForm = {
   itemStyle: {
     padding: '0 10px'
   },
@@ -22,23 +22,29 @@ export const config: IForm = {
       placeholder: '请输入用户名'
     },
     {
-      field: 'password',
-      type: 'password',
-      label: '密码',
-      placeholder: '请输入密码'
+      field: 'realname',
+      type: 'input',
+      label: '真实姓名',
+      placeholder: '请输入真实姓名'
     },
     {
-      field: 'sport',
+      field: 'cellphone',
+      type: 'input',
+      label: '电话号码',
+      placeholder: '请输入电话号码'
+    },
+    {
+      field: 'enable',
       type: 'select',
-      label: '喜欢的运动',
-      placeholder: '请选择喜欢的运动',
+      label: '用户状态',
+      placeholder: '请选择用户状态',
       options: [
-        { title: '篮球', value: 'basketball' },
-        { title: '足球', value: 'football' }
+        { title: '启用', value: '1' },
+        { title: '禁用', value: '0' }
       ]
     },
     {
-      field: 'createTime',
+      field: 'createAt',
       type: 'datepicker',
       label: '创建时间',
       otherOptions: {
@@ -48,4 +54,53 @@ export const config: IForm = {
       }
     }
   ]
+}
+
+export const contentConfig = {
+  title: '用户列表',
+  propList: [
+    {
+      prop: 'name',
+      label: '用户名',
+      minWidth: '100',
+      slotName: 'name'
+    },
+    {
+      prop: 'realname',
+      label: '真实姓名',
+      minWidth: '100',
+      slotName: 'realname'
+    },
+    {
+      prop: 'cellphone',
+      label: '手机号',
+      minWidth: '120',
+      slotName: 'cellphone'
+    },
+    {
+      prop: 'enable',
+      label: '状态',
+      minWidth: '100',
+      slotName: 'enable'
+    },
+    {
+      prop: 'createAt',
+      label: '创建时间',
+      minWidth: '250',
+      slotName: 'createAt'
+    },
+    {
+      prop: 'updateAt',
+      label: '更新时间',
+      minWidth: '250',
+      slotName: 'updateAt'
+    },
+    {
+      label: '操作',
+      minWidth: '120',
+      slotName: 'handler'
+    }
+  ],
+  showIndexColumn: true,
+  showSelectColumn: true
 }

@@ -20,7 +20,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
-                  v-model="formData[item.field]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -28,7 +29,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
-                  v-model="formData[item.field]"
+                  :model-value="modelValue[item.field]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -43,7 +45,8 @@
                   style="width: 100%"
                   v-bind="item.otherOptions"
                   size="small"
-                  v-model="formData[item.field]"
+                  :model-value="modelValue[item.field]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -57,53 +60,43 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref, watch, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { defineEmits, defineProps, PropType } from 'vue'
 import { IFormItem } from './interface'
 
-export default defineComponent({
-  props: {
-    modelValue: {
-      type: Object,
-      required: true
-    },
-    formItems: {
-      type: Array as PropType<IFormItem[]>,
-      default: () => []
-    },
-    labelWidth: {
-      type: String,
-      default: '100px'
-    },
-    itemStyle: {
-      type: Object,
-      default: () => ({ padding: '10px' })
-    },
-    colLayout: {
-      type: Object,
-      default: () => ({
-        span: 8,
-        xl: 6, // >1920px 4个
-        lg: 6,
-        md: 8,
-        sm: 12,
-        xs: 24
-      })
-    }
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const formData = ref({ ...props.modelValue })
-    // 单向数据流
-    watch(formData, (newValue) => emit('update:modelValue', newValue), {
-      deep: true
+  formItems: {
+    type: Array as PropType<IFormItem[]>,
+    default: () => []
+  },
+  labelWidth: {
+    type: String,
+    default: '100px'
+  },
+  itemStyle: {
+    type: Object,
+    default: () => ({ padding: '10px' })
+  },
+  colLayout: {
+    type: Object,
+    default: () => ({
+      span: 6,
+      xl: 6, // >1920px 4个
+      lg: 8,
+      md: 8,
+      sm: 12,
+      xs: 24
     })
-
-    return {
-      formData
-    }
   }
 })
+const emit = defineEmits(['update:modelValue'])
+
+const handleValueChange = (value: any, field: string) =>
+  emit('update:modelValue', { ...props.modelValue, [field]: value })
 </script>
 
 <style scoped lang="less">
