@@ -36,7 +36,6 @@ import { useStore } from 'vuex'
 import LTable from '@/base-ui/table'
 
 const props = defineProps(['contentConfig', 'pageName'])
-
 const store = useStore()
 
 const getPageData = (queryInfo?: any) => {
