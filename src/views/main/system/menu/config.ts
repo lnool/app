@@ -57,42 +57,43 @@ export const searchConfig: IForm = {
 }
 
 export const contentConfig = {
-  title: '用户列表',
+  title: '菜单列表',
   propList: [
     {
       prop: 'name',
-      label: '用户名',
-      minWidth: '100',
-      slotName: 'name'
+      label: '菜单名称',
+      minWidth: '100'
     },
     {
-      prop: 'realname',
-      label: '真实姓名',
-      minWidth: '100',
-      slotName: 'realname'
+      prop: 'type',
+      label: '类型',
+      minWidth: '60'
     },
     {
-      prop: 'cellphone',
-      label: '手机号',
-      minWidth: '120',
-      slotName: 'cellphone'
+      prop: 'url',
+      label: 'url',
+      minWidth: '100'
     },
     {
-      prop: 'enable',
-      label: '状态',
-      minWidth: '100',
-      slotName: 'status'
+      prop: 'icon',
+      label: '图标',
+      minWidth: '100'
+    },
+    {
+      prop: 'permission',
+      label: '按钮权限',
+      minWidth: '100'
     },
     {
       prop: 'createAt',
       label: '创建时间',
-      minWidth: '250',
+      minWidth: '220',
       slotName: 'createAt'
     },
     {
       prop: 'updateAt',
       label: '更新时间',
-      minWidth: '250',
+      minWidth: '220',
       slotName: 'updateAt'
     },
     {
@@ -101,6 +102,13 @@ export const contentConfig = {
       slotName: 'handler'
     }
   ],
-  showIndexColumn: true,
-  showSelectColumn: true
+  showIndexColumn: false,
+  showSelectColumn: false,
+  childrenProps: {
+    rowKey: 'id',
+    treeProp: {
+      children: 'children'
+    }
+  },
+  showFooter: false
 }

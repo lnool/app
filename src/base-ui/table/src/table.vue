@@ -13,6 +13,7 @@
       border
       style="width: 100%"
       @selection-change="slectionChange"
+      v-bind="childrenProps"
     >
       <el-table-column
         v-if="showSelectColumn"
@@ -28,7 +29,7 @@
         align="center"
       ></el-table-column>
       <template v-for="item in propList" :key="item.prop">
-        <el-table-column v-bind="item" align="center">
+        <el-table-column v-bind="item" align="center" show-overflow-tooltip>
           <template #default="scope">
             <slot :name="item.slotName" :row="scope.row[item.prop]">
               {{ scope.row[item.prop] }}
@@ -37,16 +38,16 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <slot name="footer">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page="page.currentPage"
+          :page-sizes="[10, 20, 30]"
+          :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="count"
         >
         </el-pagination>
       </slot>
@@ -57,18 +58,51 @@
 <script lang="ts" setup>
 import { defineProps, defineEmits } from 'vue'
 
-defineProps([
-  'listData',
-  'propList',
-  'showIndexColumn',
-  'showSelectColumn',
-  'title'
-])
-const emit = defineEmits(['slectionChange'])
+const props = defineProps({
+  title: {
+    type: String,
+    default: ''
+  },
+  listData: {
+    type: Array,
+    required: true
+  },
+  count: {
+    type: Number,
+    default: 0
+  },
+  propList: {
+    type: Array,
+    required: true
+  },
+  showIndexColumn: {
+    type: Boolean,
+    default: false
+  },
+  showSelectColumn: {
+    type: Boolean,
+    default: false
+  },
+  page: {
+    type: Object,
+    default: () => ({ currentPage: 0, pageSize: 10 })
+  },
+  childrenProps: {
+    type: Object,
+    default: () => ({})
+  },
+  showFooter: {
+    type: Boolean,
+    default: true
+  }
+})
 
-const slectionChange = (value: any): void => {
-  emit('slectionChange', value)
-}
+const emit = defineEmits(['slectionChange', 'update:page'])
+const slectionChange = (value: any): void => emit('slectionChange', value)
+const handleCurrentChange = (currentPage: number): void =>
+  emit('update:page', { ...props.page, currentPage })
+const handleSizeChange = (pageSize: number): void =>
+  emit('update:page', { ...props.page, pageSize })
 </script>
 
 <style lang="less" scoped>

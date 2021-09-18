@@ -11,7 +11,8 @@ const loginModule: Module<ILoginState, IRootState> = {
   state: () => ({
     token: '',
     userInfo: {},
-    menu: []
+    menu: [],
+    permissions: []
   }),
   mutations: {
     saveToken(state, token: string) {
@@ -22,7 +23,7 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     saveMenu(state, menu: any) {
       state.menu = menu
-      setupRoutes()
+      state.permissions = setupRoutes()
     }
   },
   actions: {

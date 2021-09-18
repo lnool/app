@@ -1,7 +1,7 @@
 import store from '@/store'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { RouteRecordRaw } from 'vue-router'
-import { fistRoute, loadRoute } from './config'
+import { fistRoute, loadRoute, menuPermissions } from './config'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -33,12 +33,14 @@ router.beforeEach((to) => {
   if (to.path === '/main') return fistRoute.path
 })
 
-export const setupRoutes = () => {
+export const setupRoutes = (): string[] => {
   const menu = state.login?.menu
   if (menu) {
     const routes = loadRoute(menu)
     routes.forEach((route) => router.addRoute('main', route))
+    return menuPermissions(menu)
   }
+  return []
 }
 
 export default router

@@ -57,28 +57,34 @@ export const searchConfig: IForm = {
 }
 
 export const contentConfig = {
-  title: '用户列表',
+  title: '商品列表',
   propList: [
     {
       prop: 'name',
-      label: '用户名',
-      minWidth: '100',
+      label: '商品名称',
+      minWidth: '80',
       slotName: 'name'
     },
     {
-      prop: 'realname',
-      label: '真实姓名',
+      prop: 'oldPrice',
+      label: '原价',
+      minWidth: '80',
+      slotName: 'oldPrice'
+    },
+    {
+      prop: 'newPrice',
+      label: '现价',
+      minWidth: '80',
+      slotName: 'newPrice'
+    },
+    {
+      prop: 'imgUrl',
+      label: '图片',
       minWidth: '100',
-      slotName: 'realname'
+      slotName: 'image'
     },
     {
-      prop: 'cellphone',
-      label: '手机号',
-      minWidth: '120',
-      slotName: 'cellphone'
-    },
-    {
-      prop: 'enable',
+      prop: 'status',
       label: '状态',
       minWidth: '100',
       slotName: 'status'

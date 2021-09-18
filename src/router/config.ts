@@ -59,4 +59,26 @@ const getBreadcrumbs = (menu: any[], currentPath: string): IBreadcrumbs[] => {
   return breadcrumbs
 }
 
-export { fistRoute, loadRoute, findRoute, getBreadcrumbs }
+/**
+ * 获取菜单权限
+ * @param menus
+ * @returns
+ */
+const menuPermissions = (menus: any[]) => {
+  const permissions: string[] = []
+
+  const _recurseGetPermission = (menus: any[]) => {
+    for (const item of menus) {
+      if (item.type === 2 || item.type === 1) {
+        _recurseGetPermission(item.children ?? [])
+      } else if (item.type === 3) {
+        permissions.push(item.permission)
+      }
+    }
+  }
+  _recurseGetPermission(menus)
+
+  return permissions
+}
+
+export { fistRoute, loadRoute, findRoute, getBreadcrumbs, menuPermissions }
