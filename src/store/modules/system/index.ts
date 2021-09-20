@@ -1,7 +1,7 @@
 import { Module } from 'vuex'
 
 import { IRootState, ISystemState } from '@/store/interface'
-import { getPageList } from '@/api'
+import { getPageList, delPageData, createPageData, editPageData } from '@/api'
 
 const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
@@ -34,14 +34,45 @@ const systemModule: Module<ISystemState, IRootState> = {
       state[`${pageName}/Count`]
   },
   actions: {
-    async getPageListAction({ commit }, payload: any) {
+    async getPageListAction(ctx, payload: any) {
       const pageName = payload.pageName
       const { list, totalCount } = (
         await getPageList(`/${pageName}/list`, payload.data)
       ).data
 
-      commit(`changeList`, { list, pageName })
-      commit(`changeCount`, { totalCount, pageName })
+      ctx.commit(`changeList`, { list, pageName })
+      ctx.commit(`changeCount`, { totalCount, pageName })
+    },
+    async delPageDataAction(ctx, payload: any) {
+      const { pageName, id } = payload
+      const url = `/${pageName}/${id}`
+      const res = await delPageData(url)
+      console.log(res)
+
+      ctx.dispatch('getPageListAction', {
+        pageName,
+        queryInfo: { offset: 0, size: 1 }
+      })
+    },
+    async createPageDataAction(ctx, payload: any) {
+      const { pageName, data } = payload
+      const url = `/${pageName}`
+      await createPageData(url, data)
+
+      ctx.dispatch('getPageListAction', {
+        pageName,
+        queryInfo: { offset: 0, size: 1 }
+      })
+    },
+    async editPageDataAction(ctx, payload: any) {
+      const { pageName, data, id } = payload
+      const url = `/${pageName}/${id}`
+      await editPageData(url, data)
+
+      ctx.dispatch('getPageListAction', {
+        pageName,
+        queryInfo: { offset: 0, size: 1 }
+      })
     }
   }
 }

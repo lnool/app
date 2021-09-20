@@ -31,7 +31,7 @@
       <template v-for="item in propList" :key="item.prop">
         <el-table-column v-bind="item" align="center" show-overflow-tooltip>
           <template #default="scope">
-            <slot :name="item.slotName" :row="scope.row[item.prop]">
+            <slot :name="item.slotName" :row="scope.row">
               {{ scope.row[item.prop] }}
             </slot>
           </template>

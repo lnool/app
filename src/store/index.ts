@@ -1,3 +1,4 @@
+import { getPageList } from '@/api'
 import { createStore, Store, useStore as useVuexStore } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 
@@ -26,4 +27,36 @@ export function useStore(): Store<IStoreType> {
   return useVuexStore()
 }
 
-export default createStore<IRootState>({ modules, plugins: [vuexLocal.plugin] })
+const state: IRootState = { entireDepartment: [], entireRole: [] }
+
+export default createStore<IRootState>({
+  state,
+  mutations: {
+    changeEntireDepartment(state: { entireDepartment: any }, payload: any) {
+      state.entireDepartment = payload
+    },
+    changeEntireRole(state: { entireRole: any }, payload: any) {
+      state.entireRole = payload
+    }
+  },
+  actions: {
+    async initialData({ commit }) {
+      const { list: departmentList } = (
+        await getPageList('/department/list', {
+          offset: 0,
+          size: 1000
+        })
+      ).data
+      const { list: roleList } = (
+        await getPageList('/role/list', {
+          offset: 0,
+          size: 1000
+        })
+      ).data
+      commit('changeEntireDepartment', departmentList)
+      commit('changeEntireRole', roleList)
+    }
+  },
+  modules,
+  plugins: [vuexLocal.plugin]
+})

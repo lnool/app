@@ -8,6 +8,7 @@
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
             <el-form-item
+              v-if="!item.isHidden"
               :label="item.label"
               :rules="item.rules"
               :style="itemStyle"
@@ -85,7 +86,7 @@ const props = defineProps({
     type: Object,
     default: () => ({
       span: 6,
-      xl: 6, // >1920px 4个
+      xl: 6,
       lg: 8,
       md: 8,
       sm: 12,

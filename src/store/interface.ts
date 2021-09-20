@@ -5,7 +5,8 @@
 /** 顶层状态 */
 export interface IRootState {
   [x: string]: any
-  name: string
+  entireDepartment: any[]
+  entireRole: any[]
 }
 
 /** 模块状态类型 */
